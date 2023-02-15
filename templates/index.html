@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block contenido1 %}
+
+
+    <div class="row mx-2 my-2">
+        <div class="col-md-12">
+            <div id="map"></div>
+			<script>
+				let my_icono = "{% static 'se2.png' %}"
+            </script>
+			<script src="{% static 'mapa.js' %}" defer></script>
+        </div>
+    </div>
+{% endblock contenido1 %}

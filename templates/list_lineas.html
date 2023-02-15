@@ -1,0 +1,58 @@
+{% extends 'base1.html' %}
+{% block contenido1 %}
+
+<section id="home" class="py-5">
+    <div class="container px-4">
+        <div class="row gx-4 justify-content-center">
+            <div class="col-lg-8">
+                <h2>Listado de Lineas</h2>
+                <br>
+				<div>
+					<a class="btn btn-primary" href="{% url 'create_lineas' %}">Crear</a> 
+                <div>
+				<br>
+				<table class="table table-bordered border-primary">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nombre Linea</th>
+                        <th scope="col">Tension</th>
+                        <th scope="col">Largo</th>
+						<th scope="col">Propietario</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for linea in lineas %}
+                    <tr>
+                        <th scope="row">{{ linea.id }}</th>
+                        <td><a href="{% url 'detalle_linea' linea.id %}">{{ linea }}</a></td>
+						<td>{{ linea.nombre_linea }}</td>
+						<td>{{ linea.tension }}</td>
+                        <td>{{ linea.largo }}</td>
+						<td>{{ linea.propietario }}</td>
+                    </tr>
+                    {% empty %}
+                    <p>No hay lineas disponibles.</p>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination pagination-mg justify-content-center">
+    {% if page_obj.has_previous %}
+		<li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+		<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+    {% endif %}
+    {% if page_obj.has_next %}
+		<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+		<li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a></li>
+    {% endif %}
+  </ul>
+</nav>
+
+
+{% endblock %}

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	{% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Mapa</title>
+    <!--Bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
+        integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
+        crossorigin="anonymous"></script>
+    <!--Mi propio css-->
+    <link href="{% static 'map.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet/dist/leaflet.css" crossorigin="" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js" crossorigin=""></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-gradient">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'home' %}">
+				<img src="{% static 'logo.jpg' %}" alt="" width="30" height="24" class="d-inline-block align-text-top">
+				Mi Mapa
+			</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Subestaciones
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="arica-parinacota" id="cbox_se_arica-parinacota" />
+                                        <label class="form-check-label" for="Checkme2">Arica-Parinacota</label>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="tarapaca" id="cbox_se_tarapaca" />
+                                        <label class="form-check-label" for="Checkme2">Tarapaca</label>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="antofagasta" id="cbox_se_antofagasta" />
+                                        <label class="form-check-label" for="Checkme2">Antofagasta</label>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="atacama" id="cbox_se_atacama" />
+                                        <label class="form-check-label" for="Checkme2">Atacama</label>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="coquimbo" id="cbox_se_coquimbo" />
+                                        <label class="form-check-label" for="Checkme2">Coquimbo</label>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="valparaiso" id="cbox_se_valparaiso" />
+                                        <label class="form-check-label" for="Checkme2">Valparaiso</label>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="metropolitana" id="cbox_se_metropolitana" />
+                                        <label class="form-check-label" for="Checkme2">Metropolitana</label>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="ohiggins" id="cbox_se_ohiggins" />
+                                        <label class="form-check-label" for="Checkme2">O’Higgins</label>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="maule" id="cbox_se_maule" />
+                                        <label class="form-check-label" for="Checkme2">Maule</label>
+                                    </div>
+                                </a>
+                            </li>
+							<li>
+                                <a class="dropdown-item" href="#">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="nuble" id="cbox_se_nuble" />
+                                        <label class="form-check-label" for="Checkme2">Ñuble</label>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="biobio" id="cbox_se_biobio" />
+                                        <label class="form-check-label" for="Checkme2">Biobio</label>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="araucania" id="cbox_se_araucania" />
+                                        <label class="form-check-label" for="Checkme2">Araucania</label>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="los-rios" id="cbox_se_los-rios" />
+                                        <label class="form-check-label" for="Checkme2">Los Rios</label>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="los-lagos" id="cbox_se_los-lagos" />
+                                        <label class="form-check-label" for="Checkme2">Los Lagos</label>
+                                    </div>
+                                </a>
+                            </li>
+							<li>
+                                <a class="dropdown-item" href="{% url 'lista_se' %}">Lista Subestaciones</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Línea
+                        </a>
+                        <ul class="dropdown-menu">
+							<li>
+                                <a class="dropdown-item" href="#">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="44" id="cbox_tension_44" />
+                                        <label class="form-check-label" for="Checkme2">44 kV</label>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="66" id="cbox_tension_66" />
+                                        <label class="form-check-label" for="Checkme2">66 kV</label>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="110" id="cbox_tension_110" />
+                                        <label class="form-check-label" for="Checkme2">110 kV</label>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="154" id="cbox_tension_154" />
+                                        <label class="form-check-label" for="Checkme2">154 kV</label>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="220" id="cbox_tension_220" />
+                                        <label class="form-check-label" for="Checkme2">220 kV</label>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="345" id="cbox_tension_345" />
+                                        <label class="form-check-label" for="Checkme2">345 kV</label>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="500" id="cbox_tension_500" />
+                                        <label class="form-check-label" for="Checkme2">500 kV</label>
+                                    </div>
+                                </a>
+                            </li>
+							<li>
+                                <a class="dropdown-item" href="{% url 'lista_lineas' %}">Lista Lineas</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'lista_puntos' %}">Puntos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'lista_propietario' %}">Propietarios</a>
+                    </li>
+                    <li class="nav-item">
+					{% if user.is_authenticated %}
+                        <a class="nav-link active" aria-current="page" href="{% url 'logout_user' %}">log out</a>
+					{% else %}
+						<a class="nav-link active" aria-current="page" href="{% url 'login_user' %}">log in</a>	
+					{% endif %}	
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+	
+	{% block contenido1 %}{% endblock contenido1 %}
+
+</body>
+
+</html>

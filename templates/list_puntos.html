@@ -1,0 +1,57 @@
+{% extends 'base1.html' %}
+{% block contenido1 %}
+
+<section id="home" class="py-5">
+    <div class="container px-4">
+        <div class="row gx-4 justify-content-center">
+            <div class="col-lg-8">
+                <h2>Listado de Puntos</h2>
+                <br>
+				<div>
+					<a class="btn btn-primary" href="{% url 'create_puntos' %}">Crear</a> 
+                <div>
+				<br>
+                <table class="table table-bordered border-primary">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nombre Punto</th>
+                        <th scope="col">Longitud</th>
+						<th scope="col">Latitud</th>
+						<th scope="col">Fecha creacion</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for punto in puntos %}
+                    <tr>
+                        <th scope="row">{{ punto.id }}</th>
+                        <td><a href="{% url 'detalle_puntos' punto.id %}">{{ punto }}</a></td>
+                        <td>{{ punto.longitud }}</td>
+                        <td>{{ punto.latitud }}</td>
+						<td>{{ punto.fecha_creacion }}</td>
+                    </tr>
+                    {% empty %}
+                    <p>No hay puntos disponibles.</p>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination pagination-mg justify-content-center">
+    {% if page_obj.has_previous %}
+		<li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+		<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+    {% endif %}
+    {% if page_obj.has_next %}
+		<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+		<li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a></li>
+    {% endif %}
+  </ul>
+</nav>
+
+
+{% endblock %}
