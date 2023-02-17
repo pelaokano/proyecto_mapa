@@ -50,7 +50,7 @@ class Subestacion(models.Model):
     nombre_subestacion = models.CharField(max_length=100, null=False, blank=False, verbose_name="Nombre")
     url_subestacion = models.URLField(max_length = 200, null=False, blank=False)
     id_subestacion = models.IntegerField(null=False, blank=False)
-    id_punto = models.ForeignKey(Punto, on_delete=models.SET_NULL, null=True)
+    id_punto = models.ForeignKey(Punto, related_name="get_sub", on_delete=models.SET_NULL, null=True)
     region = models.CharField(max_length=20,choices=REGIONES,null=True,blank=True,verbose_name="Region")
     propietario = models.ForeignKey(Propietario, on_delete=models.SET_NULL, null=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")  
@@ -76,7 +76,7 @@ class Linea(models.Model):
     nombre_linea = models.CharField(max_length=100, null=False, blank=False, verbose_name="Nombre")
     largo = models.FloatField(null=False, blank=False)
     tension = models.CharField(max_length=20,choices=TENSIONES,null=True,blank=True,verbose_name="Tension")
-    puntos = models.ManyToManyField(Punto, related_name="get_lineas")
+    puntos = models.ManyToManyField(Punto, related_name="get_linea")
     propietario = models.ForeignKey(Propietario, on_delete=models.SET_NULL, null=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     

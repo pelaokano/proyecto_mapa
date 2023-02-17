@@ -7,6 +7,7 @@ from .serializers import puntoSerializer
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.middleware.csrf import get_token
+from .clases import PuntosFiltrados, GeojsonSE, GeojsonLinea
 
 # Create your views here.
 
@@ -118,4 +119,24 @@ def enviar_geojsonLinea2(request):
         geojsonLinea={'resultados':'no se encontraron resultados para el criterio'}
 
     return JsonResponse(geojsonLinea)
+
+def enviar_geojsonFiltroPunto(request):
+    if request.method == 'POST': 
+        data = request.POST
+        lat=float(data.get('latitud'))
+        lon=float(data.get('longitud'))
+        dist=float(data.get('distancia'))
+        puntos=Punto.objects.all()
+        puntos_filtro = PuntosFiltrados(puntos, lat, lon, dist)
+        ssee, lineas = puntos_filtro.filtrar()
+        geojsonSE = GeojsonSE(ssee)
+        geojsonLinea = GeojsonLinea(lineas)
+        
+        geojsonTotal = {
+            'SSEE': geojsonSE.desplegar(),
+            'Lineas': geojsonLinea.desplegar()
+        
+        }
+        
+    return JsonResponse(geojsonTotal)
 

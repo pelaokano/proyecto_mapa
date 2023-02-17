@@ -3,10 +3,16 @@ var url = new URL(url_string);
 var urlLon = url.searchParams.get("lon");
 var urlLat = url.searchParams.get("lat");
 
-console.log(urlLon,urlLat)
+function isNumeric(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+//console.log(urlLon,urlLat)
 
 //se crea el objeto map a partir de la libreria leaflet
 var map = L.map('map');
+
+map.doubleClickZoom.disable();
 
 //se agregan las capas con las imagenes de los mapas, se podria buscar alguna imagen mejor
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -28,7 +34,6 @@ var seIcon = L.icon({
     iconAnchor: [10, 25],
     popupAnchor: [0, -28]
 });
-
 
 //funcion para extraer un parametro de las cookies
 function getCookie(name) {
@@ -112,6 +117,20 @@ coloresLinea = {
 '345':'#000000', //negro
 '44':'#FFFF00' //amarillo
 }
+
+function cambiarEstiloCapa(capaGejson) {
+
+    capaGejson.eachLayer(function(elemento) {
+        let tension = elemento.feature.properties['tension'];
+	
+        elemento.setStyle({
+            'color': coloresLinea[tension],
+			'weight': 3,
+            'opacity': 1
+        });
+    });
+}
+
 //funcion para crear capas de las lineas
 function crearCapaGeoJsonLinea(data,color){
 	
@@ -176,6 +195,112 @@ document.querySelectorAll("input[id^='cbox_se_']").forEach(item => {
 	}
   });
 });
+
+//agregar un marcador al hacer doble click
+validador = true;
+
+inlat = 0;
+inlon = 0;
+
+capasSE_filtro = new Object();
+capasLinea_filtro = new Object();
+marcador = new Object();
+
+function contenidoPopup(latitud,longitud){
+
+contenido = '<table><th colspan="2"style="text-align: center">Buscar Instalaciones</th>' +
+			'<tr><td><label for="name1">Latitud: </label></td>' +
+			'<td><input type="text" id="name1" size="10" value="' + latitud + '" disabled></td></tr>'+
+			'<tr><td><label for="name2">Longitud: </label></td>' +
+			'<td><input type="text" id="name2" size="10" value="' + longitud + '" disabled></td></tr>' +
+			'<tr><td><label for="distancia">Distancia: </label></td>' +
+			'<td><input type="text" id="distancia" size="10"></td></tr>' +
+			//'<script>distancia = document.getElementById("distancia").value;</script>' +
+			
+			'<tr><td colspan="2" style="text-align: center">' +
+			'<input id="buscar" type="button" value="Buscar" onclick="buscarInstalaciones();"/>' +
+			'</td></tr></table>';
+			
+return contenido;
+
+}
+
+function crearMarcador(Lat_Lon){
+	
+    if (validador) {
+        marcador = L.marker(Lat_Lon).addTo(map);
+		marcador.bindPopup(contenidoPopup(Lat_Lon.lat,Lat_Lon.lng)).openPopup();
+        validador = false
+		inlat = Lat_Lon.lat;
+		inlon = Lat_Lon.lng;
+    } else {
+        map.removeLayer(marcador);
+		map.removeLayer(capasSE_filtro);
+		map.removeLayer(capasLinea_filtro);
+        marcador = L.marker(Lat_Lon).addTo(map);
+		marcador.bindPopup(contenidoPopup(Lat_Lon.lat,Lat_Lon.lng)).openPopup();
+		inlat = Lat_Lon.lat;
+		inlon = Lat_Lon.lng;
+    }
+}
+
+map.on('dblclick', function (e) {
+	crearMarcador(e.latlng);
+});
+
+function buscarInstalaciones(){
+	
+	distancia = document.getElementById("distancia").value;
+	//console.log(distancia)
+	
+	if (isNumeric(distancia)){
+		if (parseFloat(distancia) <= 0){
+			alert('La distancia debe ser mayor que 0')
+		}else{
+			
+			let formData = new FormData();
+			formData.append('latitud', inlat);
+			formData.append('longitud', inlon);
+			formData.append('distancia', parseFloat(distancia));
+
+			postData('/api/v1/enviar_geojsonFiltroPunto', csrftoken1, formData, { answer: 42 })
+			.then((data) => {
+				
+				capasSE_filtro = crearCapaGeoJsonPunto(data['SSEE']);
+				capasLinea_filtro = crearCapaGeoJsonLinea(data['Lineas'],'220');
+				cambiarEstiloCapa(capasLinea_filtro);
+				map.addLayer(capasSE_filtro);
+				map.addLayer(capasLinea_filtro);
+			});
+		}
+	}else{
+		alert('La distancia debe ser un numero')
+	}	
+}
+
+function limpiarMapa(){
+	map.removeLayer(marcador);
+	map.removeLayer(capasSE_filtro);
+	map.removeLayer(capasLinea_filtro);
+	document.getElementById("inp_latitud").value = ''
+	document.getElementById("inp_longitud").value = ''
+}
+
+function AgregarMarcador(){
+	
+	let latitud = parseFloat(document.getElementById("inp_latitud").value);
+	let longitud = parseFloat(document.getElementById("inp_longitud").value);
+	
+	if (isNumeric(latitud) && isNumeric(longitud)){
+		let latlng = L.latLng(latitud, longitud);
+		crearMarcador(latlng);
+		document.getElementById("inp_latitud").value = ''
+		document.getElementById("inp_longitud").value = ''
+	}else{
+		alert('La latitud y longitud deben ser numeros');
+	}		
+}
+
 
 
 

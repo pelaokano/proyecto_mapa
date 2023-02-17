@@ -235,6 +235,40 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{% url 'lista_propietario' %}">Propietarios</a>
                     </li>
+					<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Marcador
+                        </a>
+                        <ul class="dropdown-menu">
+							<li>
+                                <a class="dropdown-item" href="#">
+									<div class="input-group">
+										<label for="inp_latitud">Latitud: </label>
+                                    </div>
+                                    <div class="input-group">
+										<input class="form-control" type="text" id="inp_latitud"/>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+									<div class="input-group">
+										<label for="inp_longitud">Longitud: </label>
+                                    </div>
+                                    <div class="input-group">
+										<input class="form-control" type="text" id="inp_longitud" />
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#" onclick="AgregarMarcador()">Agregar</a>
+                            </li>
+							<li>
+                                <a class="dropdown-item" href="#" onclick="limpiarMapa()">Limpiar</a>
+                            </li>
+                        </ul>
+                    </li>
                     <li class="nav-item">
 					{% if user.is_authenticated %}
                         <a class="nav-link active" aria-current="page" href="{% url 'logout_user' %}">log out</a>
@@ -246,7 +280,7 @@
             </div>
         </div>
     </nav>
-	
+		
 	{% block contenido1 %}{% endblock contenido1 %}
 
 </body>
