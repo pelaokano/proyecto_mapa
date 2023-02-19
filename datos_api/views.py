@@ -135,8 +135,7 @@ def enviar_geojsonFiltroPunto(request):
         geojsonTotal = {
             'SSEE': geojsonSE.desplegar(),
             'Lineas': geojsonLinea.desplegar()
-        
         }
-        
+
     return JsonResponse(geojsonTotal)
 

@@ -267,10 +267,11 @@ function buscarInstalaciones(){
 			.then((data) => {
 				
 				capasSE_filtro = crearCapaGeoJsonPunto(data['SSEE']);
+				map.addLayer(capasSE_filtro);
 				capasLinea_filtro = crearCapaGeoJsonLinea(data['Lineas'],'220');
 				cambiarEstiloCapa(capasLinea_filtro);
-				map.addLayer(capasSE_filtro);
 				map.addLayer(capasLinea_filtro);
+
 			});
 		}
 	}else{

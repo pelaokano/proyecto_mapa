@@ -7,6 +7,10 @@ class PuntoForm(ModelForm):
     class Meta:
         model = Punto
         fields = ['nombre_punto', 'longitud', 'latitud']
+        help_texts = {
+            'longitud': 'Se deben ingresar en coordenadas decimales',
+            'latitud': 'Se deben ingresar en coordenadas decimales'
+        }
     
     def clean(self):
         cleaned_data = super().clean()

@@ -83,10 +83,25 @@ WSGI_APPLICATION = 'proyecto_base.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'replica': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        'TEST': {
+            'MIRROR': 'default',
+        }
+    },
+    
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'mi_data_base',
+        'USER': 'pelaokano',
+        'PASSWORD': 'aalar009',
+        'HOST': 'localhost',
+        'PORT': '3306',
+        
     }
+    
+    
 }
 
 # DATABASES = {
